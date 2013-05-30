@@ -1,5 +1,5 @@
-C-large-practice.in#include<iostream>      
-#include<cstdio>      
+#include<iostream>      
+#include<cstdio>     
 #include<map>      
 #include<cstring>      
 #include<cmath>      
