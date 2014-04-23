@@ -1,0 +1,40 @@
+<html><body bgcolor="#000000" text="#ffffff"><table><tr><td colspan="2"><h3>Problem Statement</h3></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><p>Magical Girls are girls who have magical powers. They fight against evil witches to protect the Earth.</p>
+<br></br>
+<p>You, one of the Magical Girls, found a slate palette. You know that the information of an ancient magic is written on the palette. Unfortunately, some parts of the palette are broken, so you cannot read all the information.</p>
+<br></br>
+<p>The information is indicated by a rectangular grid whose width is W and height is H. Rows are numbered from 0 to H-1 from top to bottom. Columns are numbered from 0 to W-1 from left to right. Each cell of the grid should contain an integer between 1 and 9, inclusive. Now some of the cells are broken and don't contain a digit. You want to know how many ways the empty cells can be filled so that the completed grid meets the following conditions:</p>
+<br></br>
+<ul>
+<li>For all integers r and c, where 0 &lt;= r &lt;= H-<b>n</b> and 0 &lt;= c &lt; W, the sum F[r][c] + F[r+1][c] + ... + F[r+<b>n</b>-1][c] must be an odd number. (Here F[r][c] is a number written in the cell whose row number is r and column number is c.)</li>
+<li>For all integers r and c, where 0 &lt;= r &lt; H and 0 &lt;= c &lt;= W-<b>m</b>, the sum F[r][c] + F[r][c+1] + ... + F[r][c+<b>m</b>-1] must be an odd number.</li>
+</ul>
+<br></br>
+<p>You are given a vector &lt;string&gt; <b>palette</b>. The j-th character of the i-th element of <b>palette</b> is a digit ('1'-'9') if the cell (i, j) is not broken, or a dot ('.') if the cell (i, j) is broken and now empty. Return the number of ways to fill the grid modulo 1,000,000,007.</p>
+</td></tr><tr><td colspan="2"><h3>Definition</h3></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td>Class:</td><td>MagicalGirlLevelTwoDivOne</td></tr><tr><td>Method:</td><td>theCount</td></tr><tr><td>Parameters:</td><td>vector &lt;string&gt;, int, int</td></tr><tr><td>Returns:</td><td>int</td></tr><tr><td>Method signature:</td><td>int theCount(vector &lt;string&gt; palette, int n, int m)</td></tr><tr><td colspan="2">(be sure your method is public)</td></tr></table></td></tr><tr><td colspan="2"><h3>Limits</h3></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td>Time limit (s):</td><td>2.000</td></tr><tr><td>Memory limit (MB):</td><td>64</td></tr></table></td></tr><tr><td colspan="2"><h3>Constraints</h3></td></tr><tr><td align="center" valign="top">-</td><td><b>palette</b> will contain between 1 and 50 elements, inclusive.</td></tr><tr><td align="center" valign="top">-</td><td>Each element of <b>palette</b> will contain between 1 and 50 characters, inclusive.</td></tr><tr><td align="center" valign="top">-</td><td>Each element of <b>palette</b> will contain the same number of characters.</td></tr><tr><td align="center" valign="top">-</td><td>Each character in <b>palette</b> will be '1', '2', '3', '4', '5', '6', '7', '8', '9', or '.'.</td></tr><tr><td align="center" valign="top">-</td><td><b>n</b> will be between 1 and min{10, H}, inclusive, where H is the number of elements in <b>palette</b>.</td></tr><tr><td align="center" valign="top">-</td><td><b>m</b> will be between 1 and min{10, W}, inclusive, where W is the number of characters in <b>palette</b>[0].</td></tr><tr><td colspan="2"><h3>Examples</h3></td></tr><tr><td align="center" nowrap="true">0)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>{&quot;12&quot;,
+ &quot;2.&quot;}</pre></td></tr><tr><td><pre>2</pre></td></tr><tr><td><pre>2</pre></td></tr></table></td></tr><tr><td><pre>Returns: 5</pre></td></tr><tr><td><table><tr><td colspan="2">The&nbsp;missing&nbsp;digit&nbsp;can&nbsp;be&nbsp;filled&nbsp;with&nbsp;'1',&nbsp;'3',&nbsp;'5',&nbsp;'7'&nbsp;or&nbsp;'9'.</td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">1)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>{&quot;21&quot;,
+ &quot;1.&quot;}</pre></td></tr><tr><td><pre>2</pre></td></tr><tr><td><pre>2</pre></td></tr></table></td></tr><tr><td><pre>Returns: 4</pre></td></tr><tr><td><table><tr><td colspan="2">This&nbsp;time&nbsp;it&nbsp;can&nbsp;be&nbsp;filled&nbsp;with&nbsp;'2',&nbsp;'4',&nbsp;'6'&nbsp;or&nbsp;'8'.</td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">2)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>{&quot;...&quot;,
+ &quot;...&quot;,
+ &quot;...&quot;}</pre></td></tr><tr><td><pre>1</pre></td></tr><tr><td><pre>1</pre></td></tr></table></td></tr><tr><td><pre>Returns: 1953125</pre></td></tr><tr><td><table><tr><td colspan="2"></td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">3)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>{&quot;..58..&quot;,
+ &quot;..47..&quot;}</pre></td></tr><tr><td><pre>2</pre></td></tr><tr><td><pre>3</pre></td></tr></table></td></tr><tr><td><pre>Returns: 0</pre></td></tr><tr><td><table><tr><td colspan="2">It's impossible to fill this grid.</td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">4)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>{&quot;...1.2.3&quot;,
+ &quot;4.5.6...&quot;,
+ &quot;...7.8.9&quot;,
+ &quot;1.2.3...&quot;}</pre></td></tr><tr><td><pre>4</pre></td></tr><tr><td><pre>4</pre></td></tr></table></td></tr><tr><td><pre>Returns: 886073030</pre></td></tr><tr><td><table><tr><td colspan="2"></td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">5)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>{&quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;,
+ &quot;....................&quot;}</pre></td></tr><tr><td><pre>10</pre></td></tr><tr><td><pre>10</pre></td></tr></table></td></tr><tr><td><pre>Returns: 240076532</pre></td></tr><tr><td><table><tr><td colspan="2"></td></tr></table></td></tr></table></td></tr></table><p>This problem statement is the exclusive and proprietary property of TopCoder, Inc.  Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited.  (c)2003, TopCoder, Inc.  All rights reserved.  </p></body></html>
