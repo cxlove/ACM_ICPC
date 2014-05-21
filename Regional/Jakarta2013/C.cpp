@@ -12,10 +12,30 @@
 #include <stack>
 #include <cmath>
 using namespace std;
-const int N = 105;
-const int MOD = 1000000007;
-int n , m , a[N];
-long long dp[N][N];
+const int N = 20005;
+const int inf = 1000000007;
+long long ans ;
+int  n , size[N];
+vector <int> e[N];
+void dfs (int u , int pre) {
+    size[u] = 1;
+    vector <int> a;
+    for (int i = 0 ; i < e[u].size() ; i ++) {
+        int v = e[u][i];
+        if (v == pre) continue;
+        dfs (v , u);
+        a.push_back (size[v]);
+        size[u] += size[v];
+    }
+    if (n - size[u] > 0) {
+        a.push_back (n - size[u]);
+    }
+    long long ret = 0;
+    for (int i = 0 ; i < a.size() ; i ++) {
+        ret += 1LL * a[i] * (n - 1 - a[i]);
+    }
+    ans = max (ans , ret / 2);
+}
 int main(){
 #ifndef ONLINE_JUDGE
     freopen ("input.txt" , "r" , stdin);
@@ -24,21 +44,18 @@ int main(){
     int t , cas = 0;
     scanf ("%d" , &t);
     while (t --) {
-        scanf ("%d %d" , &n , &m);
-        for (int i = 1 ; i <= n ; i ++) {
-            scanf ("%d" , &a[i]);
+        scanf ("%d" , &n);
+        for (int i = 1 ; i <= n ; i ++)
+            e[i].clear ();
+        for (int i = 1 ; i < n ; i ++) {
+            int u , v;
+            scanf ("%d %d" , &u , &v);
+            e[u].push_back (v);
+            e[v].push_back (u);
         }
-        sort (a + 1 , a + 1 + n);
-        memset (dp , 0x11 , sizeof (dp));
-        dp[0][0] = 0;
-        for (int i = 1 ; i <= n ; i ++) {
-            for (int j = 1 ; j <= m ; j ++) {
-                for (int k = 0 ; k < i ; k ++) {
-                    dp[i][j] = min (dp[i][j] , dp[k][j - 1] + a[i] - a[k + 1]);
-                }
-            }
-        }
-        printf ("Case #%d: %lld\n" , ++ cas , dp[n][m]);
+        ans = 0;
+        dfs (1 , 0);
+        printf ("Case #%d: %lld\n" , ++ cas , ans);
     }
     return 0;
 }

@@ -8,14 +8,17 @@
 #include <sstream>
 #include <set>
 #include <ctime>
+#include <queue>
 #include <map>
 #include <stack>
 #include <cmath>
 using namespace std;
-const int N = 105;
-const int MOD = 1000000007;
-int n , m , a[N];
-long long dp[N][N];
+const int N = 1305;
+const int HASH = 1000000007;
+int n , m;
+double minP[N][N] , maxP[N][N];
+double c[N] , w[N];
+double correct[N] , wrong[N];
 int main(){
 #ifndef ONLINE_JUDGE
     freopen ("input.txt" , "r" , stdin);
@@ -26,19 +29,35 @@ int main(){
     while (t --) {
         scanf ("%d %d" , &n , &m);
         for (int i = 1 ; i <= n ; i ++) {
-            scanf ("%d" , &a[i]);
+            scanf ("%lf" , &c[i]);
+            c[i] /= 100.0;
         }
-        sort (a + 1 , a + 1 + n);
-        memset (dp , 0x11 , sizeof (dp));
-        dp[0][0] = 0;
         for (int i = 1 ; i <= n ; i ++) {
-            for (int j = 1 ; j <= m ; j ++) {
-                for (int k = 0 ; k < i ; k ++) {
-                    dp[i][j] = min (dp[i][j] , dp[k][j - 1] + a[i] - a[k + 1]);
+            scanf ("%lf" , &w[i]);
+            w[i] /= 100.0;
+        }
+        for (int i = 1 ; i <= n ; i ++) {
+            // the answer you give is correct
+            correct[i] = c[i] - w[i] + (1.0 - c[i] - w[i]);
+            // ..... incorrect
+            wrong[i] = c[i] - w[i] - (1.0 - c[i] - w[i]);
+        }
+        for (int i = 0 ; i <= m ; i ++)
+            minP[0][i] = maxP[0][i] = 15000;
+        for (int i = 1 ; i <= n ; i ++) {
+            for (int j = 0 ; j <= min (i , m) ; j ++) {
+                minP[i][j] = min (minP[i - 1][j] * correct[i] , maxP[i - 1][j] * correct[i]);
+                maxP[i][j] = max (minP[i - 1][j] * correct[i] , maxP[i - 1][j] * correct[i]);
+                if (j) {
+                    minP[i][j] = min (minP[i][j] , min (minP[i - 1][j - 1] * wrong[i] , maxP[i - 1][j - 1] * wrong[i]));
+                    maxP[i][j] = max (maxP[i][j] , max (minP[i - 1][j - 1] * wrong[i] , maxP[i - 1][j - 1] * wrong[i]));
                 }
             }
         }
-        printf ("Case #%d: %lld\n" , ++ cas , dp[n][m]);
+        double ans = 15000;
+        for (int i = 0 ; i <= m ; i ++)
+            ans = min (ans , minP[n][i]);
+        printf ("Case #%d: %.3f\n" , ++cas , ans);
     }
     return 0;
 }

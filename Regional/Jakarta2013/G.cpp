@@ -8,14 +8,14 @@
 #include <sstream>
 #include <set>
 #include <ctime>
+#include <queue>
 #include <map>
 #include <stack>
 #include <cmath>
 using namespace std;
 const int N = 105;
-const int MOD = 1000000007;
-int n , m , a[N];
-long long dp[N][N];
+const int inf = 1000000007;
+long long p[N] , vis[N];
 int main(){
 #ifndef ONLINE_JUDGE
     freopen ("input.txt" , "r" , stdin);
@@ -24,21 +24,39 @@ int main(){
     int t , cas = 0;
     scanf ("%d" , &t);
     while (t --) {
-        scanf ("%d %d" , &n , &m);
-        for (int i = 1 ; i <= n ; i ++) {
-            scanf ("%d" , &a[i]);
+        for (int i = 0 ; i < N ; i ++) {
+            vis[i] = 0;
+            p[i] = -(1LL << 60);
         }
-        sort (a + 1 , a + 1 + n);
-        memset (dp , 0x11 , sizeof (dp));
-        dp[0][0] = 0;
-        for (int i = 1 ; i <= n ; i ++) {
-            for (int j = 1 ; j <= m ; j ++) {
-                for (int k = 0 ; k < i ; k ++) {
-                    dp[i][j] = min (dp[i][j] , dp[k][j - 1] + a[i] - a[k + 1]);
+        int q;scanf ("%d" , &q);
+        printf ("Case #%d:\n" , ++ cas);
+        priority_queue <long long> que[N];
+        while (q --) {
+            char str[5];
+            scanf ("%s" , str);
+            if (str[0] == 'P') {
+                int x , y , k;
+                scanf ("%d %d %d" , &x , &y , &k);
+                que[k].push (1LL * y - 1LL * x * k);
+                // p[k] = max (p[k] , 1LL * y - 1LL * x * k);
+            }
+            else {
+                int x;scanf ("%d" , &x);
+                long long ans = -(1LL << 60) , idx;
+                for (int i = 0 ; i < N ; i ++) {
+                    if (!que[i].empty ()) {
+                        long long p = que[i].top ();
+                        long long ret = p + 1LL * i * x;
+                        if (ret >= ans) {
+                            ans = ret;
+                            idx = i;
+                        }
+                    }
                 }
+                que[idx].pop ();
+                printf ("%lld %lld\n" , ans , idx);
             }
         }
-        printf ("Case #%d: %lld\n" , ++ cas , dp[n][m]);
     }
     return 0;
 }
