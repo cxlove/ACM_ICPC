@@ -1,0 +1,95 @@
+var f:array[0..1,0..1200,0..1200] of longint;
+    tt,gb,i,j,n,s1,s2,e,c1,c,d,k,maxn,ans,a1,a2,a3:longint;
+    h,w,s:array[0..100] of longint;
+
+function max(a,b:longint):longint;
+  begin
+    if a>b then exit(a) else exit(b);
+  end;
+
+function min(a,b:longint):longint;
+  begin
+    if a<b then exit(a) else exit(b);
+  end;
+
+procedure swap(var a,b:longint);
+  var r:longint;
+  begin
+    r:=a;
+    a:=b;
+    b:=r;
+  end;
+
+begin
+  readln(tt);
+  for gb:=1 to tt do
+    begin
+      readln(n);
+      for i:=1 to n do
+        readln(h[i],w[i]);
+      for i:=1 to n-1 do
+        for j:=i+1 to n do
+          if h[i]<h[j] then
+            begin
+              swap(h[i],h[j]);
+              swap(w[i],w[j]);
+            end;
+      s[0]:=0;
+      for i:=1 to n do
+        s[i]:=s[i-1]+w[i];
+      maxn:=trunc(s[n]/2+100);
+      for i:=0 to maxn do
+        for j:=0 to maxn do
+          f[0,i,j]:=maxlongint;
+      f[0,0,0]:=0;
+      for i:=0 to n-1 do
+        begin
+          s1:=i mod 2;
+          s2:=(i+1) mod 2;
+          filldword(f[s2],sizeof(f[s2]) div 4,maxlongint);
+          for j:=0 to min(s[i],maxn) do
+            for k:=(s[i]-j) div 2 to j do
+              if f[s1,j,k]<>maxlongint then
+                begin
+                  c:=f[s1,j,k];
+                  // 1
+                  if j+w[i+1]<=maxn then
+                    begin
+                      if j=0 then d:=c+h[i+1] else d:=c;
+                      if d<f[s2,j+w[i+1],k] then f[s2,j+w[i+1],k]:=d;
+                    end;
+                  // 2
+                  if k+w[i+1]<=maxn then
+                    begin
+                      if k=0 then d:=c+h[i+1] else d:=c;
+                      a1:=j;a2:=k+w[i+1];
+                      if a1<a2 then swap(a1,a2);
+                      if d<f[s2,a1,a2] then f[s2,a1,a2]:=d;
+                    end;
+                  // 3
+                  e:=s[i]-j-k;
+                  if e+w[i+1]<=maxn then
+                    begin
+                      if e=0 then d:=c+h[i+1] else d:=c;
+                      a1:=j;a2:=k;a3:=e+w[i+1];
+                      if a3>a1 then swap(a1,a3) else
+                        if a3>a2 then swap(a2,a3);
+                      if d<f[s2,a1,a2] then f[s2,a1,a2]:=d;
+                    end;
+                end
+              else
+                if j+k>s[i] then break;
+        end;
+      ans:=maxlongint;
+      for i:=1 to maxn do
+        for j:=1 to maxn do
+          if f[s2,i,j]<>maxlongint then
+            begin
+              if s[n]=i+j then continue;
+              c1:=max(max(i,j),s[n]-i-j);
+              if c1*f[s2,i,j]<ans then ans:=c1*f[s2,i,j];
+            end;
+      writeln(ans);
+    end;
+end.
+
