@@ -1,0 +1,135 @@
+#include<iostream>
+#include<cstdio>
+#include<map>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+#include<set>
+#include<string>
+#include<queue>
+#define inf 1<<28
+#define M 6000005
+#define N 1000005
+#define Min(a,b) ((a)<(b)?(a):(b))
+#define Max(a,b) ((a)>(b)?(a):(b))
+#define pb(a) push_back(a)
+#define mem(a,b) memset(a,b,sizeof(a))
+#define LL long long
+#define MOD 1000000007
+using namespace std;
+class Trie{
+public:
+    Trie *next[26],*fail;
+    int word;
+    Trie(){word=0;mem(next,NULL);fail=NULL;}
+};
+Trie *que[M];
+int tot;
+Trie *NewNode(){
+    Trie *tmp=new Trie;
+    mem(tmp->next,NULL);
+    tmp->word=0;
+    return tmp;
+}
+void Insert(Trie *root,char *s,int len){
+    Trie *t=root;
+    for(int i=0;i<len;i++){
+        if(t->next[s[i]-'A']==NULL)
+            t->next[s[i]-'A']=new Trie();
+        t=t->next[s[i]-'A'];
+    }
+    t->word++;
+}
+void Bulid_fail(Trie *root){
+    int head=0,tail=0;
+    que[tail++]=root;
+    root->fail=NULL;
+    while(head<tail){
+        Trie *temp=que[head++],*p;
+        for(int i=0;i<26;i++){
+             if(temp->next[i]==NULL)                        
+                 continue;
+              if(temp==root)                 
+                  temp->next[i]->fail=root;              
+              else{
+                  p=temp->fail;                
+                  while(p!=NULL){                
+                      if(p->next[i]!=NULL){                              
+                          temp->next[i]->fail=p->next[i];        
+                          break;                             
+                      }                           
+                      p=p->fail;                     
+                  }                
+                  if(p==NULL)          
+                      temp->next[i]->fail=root;                                                
+              }                    
+              que[tail++]=temp->next[i];         
+        }      
+    }
+}
+int AC(Trie *root,char *s,int len){
+       Trie *p=root;
+       int cnt=0;
+       for(int i=0;i<len;i++){
+              while(p->next[s[i]-'A']==NULL&&p!=root)
+                     p=p->fail;
+              p=p->next[s[i]-'A'];
+              p=(p==NULL)?root:p;
+              Trie *temp=p;
+              while(temp!=root){
+                     if(temp->word>0){
+                           cnt+=temp->word;
+                           temp->word=0;
+                     }
+                     else  break;
+                     temp=temp->fail;
+              }
+       }
+       return cnt;
+}
+char str1[M],str2[M],str3[M];
+void change(){
+    int len1=strlen(str1),num,i,j;
+    int len2=0;
+    for(i=0;i<len1;i++){
+        if(str1[i]>='A'&&str1[i]<='Z'){
+            str2[len2++]=str1[i];
+            continue;
+        }
+        if(str1[i]=='['){
+            i++;
+            num=0;
+            for(;str1[i]>='0'&&str1[i]<='9';i++)
+                num=num*10+str1[i]-'0';
+            int ll=len2;
+            for(j=ll;j<ll+num;j++){
+                str2[j]=str1[i];
+                len2++;
+            }
+            i+=1;
+        }
+    }
+    str2[len2]='\0';str3[len2]='\0';
+    for(i=0;i<len2;i++)
+        str3[i]=str2[len2-i-1]; 
+}
+int main(){
+    int t,n;
+    scanf("%d",&t);
+    while(t--){
+        tot=0;
+        Trie *root=new Trie();
+        scanf("%d",&n);
+        for(int i=0;i<n;i++){
+            char str[1005];
+            scanf("%s",str);
+            Insert(root,str,strlen(str));
+        }
+        Bulid_fail(root);
+        scanf("%s",str1);
+        change();
+        printf("%d\n",AC(root,str2,strlen(str2))+AC(root,str3,strlen(str3)));
+    }
+    return 0;
+}
